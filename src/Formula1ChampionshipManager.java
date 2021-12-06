@@ -181,6 +181,36 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    static class raceSort implements Comparator<Race>{
+        public int compare(Race race1, Race race2){
+            if(race1.getYear()==race2.getYear()){
+                if(race1.getMonth()==race2.getMonth()){
+                    if(race1.getDay()==race2.getDay()){
+                        return 0;
+                    }
+                    else if(race1.getDay()>race2.getDay()){
+                        return 1;
+                    }
+                    else{
+                        return  -1;
+                    }
+                }
+                else if(race1.getMonth()>race2.getMonth()){
+                    return 1;
+                }
+                else{
+                    return -1;
+                }
+            }
+            else if(race1.getYear()>race2.getYear()){
+                return 1;
+            }
+            else{
+                return -1;
+            }
+        }
+    }
+
     @Override
     public void displayStats() {
         if(driverList.isEmpty()){
@@ -438,7 +468,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
-    public void displayGui(String tableTitle){
+    public void buildTableGui(String tableTitle){
         String[][] data = new String[driverList.size()][8];
         int index=0;
         for(Formula1Driver driver:driverList){
@@ -471,21 +501,21 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         sortDescending.setBounds(50,50,180,30);
         sortDescending.addActionListener(e -> {
             driverList.sort(new driverSortDescending());
-            displayGui("Driver Table Descending");
+            buildTableGui("Driver Table Descending");
         });
 
         JButton sortAscending=new JButton("Sort : Ascending");
         sortAscending.setBounds(250,50,180,30);
         sortAscending.addActionListener(e -> {
             driverList.sort(new driverSortAscending());
-            displayGui("Driver Table Ascending");
+            buildTableGui("Driver Table Ascending");
         });
 
         JButton sortFirstPosition=new JButton("Sort : 1st Positions won");
         sortFirstPosition.setBounds(450,50,180,30);
         sortFirstPosition.addActionListener(e -> {
             driverList.sort(new driverSortFirstPositions());
-            displayGui("Driver Table First Positions");
+            buildTableGui("Driver Table First Positions");
         });
 
         JButton generateRace=new JButton("Generate Race");
@@ -496,6 +526,32 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
         JButton sortRace=new JButton("Sort : Races");
         sortRace.setBounds(450,100,180,30);
+        sortRace.addActionListener(e -> {
+            raceList.sort(new raceSort());
+            String[][] data = new String[raceList.size()][13];
+            int index=0;
+            for(Race race1:raceList){
+                data[index][0] = String.valueOf(race1.getDay());
+                data[index][1] = String.valueOf(race1.getMonth());
+                data[index][2] = String.valueOf(race1.getYear());
+                int positionCount = 0;
+                for(int i=3;i<(race1.getDriverPosition().size()+3);i++){
+                    data[index][i] = race1.getDriverPosition().get(positionCount);
+                    positionCount++;
+                }
+                index++;
+            }
+
+            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+            "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+            JTable table = new JTable(data,columnName);
+            JFrame frame = new JFrame("Sorted Races");
+            frame.add(new JScrollPane(table));
+            frame.setSize(640,480);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
+        });
 
         JButton searchRace=new JButton("Search race");
         searchRace.setBounds(50,150,180,30);
