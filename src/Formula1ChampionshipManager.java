@@ -172,10 +172,10 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
     static class driverSortFirstPositions implements Comparator<Formula1Driver>{
         public int compare(Formula1Driver driver1, Formula1Driver driver2){
-            if(driver1.getPositionsCount()[0]==driver2.getPositionsCount()[1]){
+            if(driver1.getPositionsCount()[0]==driver2.getPositionsCount()[0]){
                 return 0;
             }
-            else if (driver1.getPositionsCount()[0]>driver2.getPositionsCount()[1]){
+            else if (driver1.getPositionsCount()[0]>driver2.getPositionsCount()[0]){
                 return -1;
             }else{
                 return 1;
