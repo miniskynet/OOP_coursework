@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Formula1ChampionshipManager implements ChampionshipManager {
 
@@ -522,6 +523,48 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
         JButton generateRace=new JButton("Generate Race");
         generateRace.setBounds(50,100,180,30);
+        generateRace.addActionListener(e -> {
+            Collections.shuffle(driverList);
+            ArrayList<String> shuffledDrivers = new ArrayList<>();
+            int index = 0;
+            for(Formula1Driver driver:driverList){
+                shuffledDrivers.add(index,driver.getDriverName());
+                index++;
+            }
+            int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
+            int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
+            int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
+            String[][] data = new String[1][13];
+            data[0][0] = String.valueOf(randomDay);
+            data[0][1] = String.valueOf(randomMonth);
+            data[0][2] = String.valueOf(randomYear);
+            Race randomRace = new Race();
+            randomRace.setDay(randomDay);
+            randomRace.setMonth(randomMonth);
+            randomRace.setYear(randomYear);
+            int positionIndex = 3;
+            int position = 0;
+            for(Formula1Driver driver:driverList){
+                data[0][positionIndex] = driver.getDriverName();
+                driver.addRaces();
+                driver.addPosition(position);
+                positionIndex++;
+                position++;
+            }
+            randomRace.setDriverPosition(shuffledDrivers);
+            raceList.add(randomRace);
+
+            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+            JTable table = new JTable(data,columnName);
+            JFrame frame = new JFrame("Sorted Races");
+            frame.add(new JScrollPane(table));
+            frame.setSize(640,480);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
+
+        });
 
         JButton generateRaceMod=new JButton("Generate Race II");
         generateRaceMod.setBounds(250,100,180,30);
@@ -557,6 +600,11 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
         JButton searchRace=new JButton("Search race");
         searchRace.setBounds(50,150,180,30);
+        JTextField userInputField = new JTextField();
+        userInputField.setBounds(50,200,180,30);
+        userInputField.addActionListener(e -> {
+
+        });
 
         f.add(sortDescending);
         f.add(sortAscending);
@@ -565,6 +613,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         f.add(generateRaceMod);
         f.add(sortRace);
         f.add(searchRace);
+        f.add(userInputField);
         f.setSize(800,600);
         f.setLayout(null);
         f.setVisible(true);
