@@ -4,11 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Formula1ChampionshipManager implements ChampionshipManager {
 
-    //create array to store Formula1Driver objects
     ArrayList<Formula1Driver> driverList = new ArrayList<>();
     ArrayList<Race> raceList = new ArrayList<>();
     Scanner sc = new Scanner(System.in);
@@ -27,7 +25,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 "9. Exit");
     }
 
-    //separate method to check if a certain driver name already exists within the array
+    //checks if a certain driver name already exists within the driverList array list
     public boolean checkName(String driverName) {
         boolean nameExists = false;
         for (Formula1Driver i : driverList) {
@@ -39,7 +37,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         return nameExists;
     }
 
-    //separate method to check if a certain team already exists within the array
+    //separate method to check if a certain team already exists within the driverList array list
     public boolean checkTeams(String teamName) {
         boolean teamExists = false;
         for (Formula1Driver i : driverList) {
@@ -51,6 +49,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         return teamExists;
     }
 
+    //stores new Driver object in the driverlist based on user entered details
     @Override
     public void createNewDriver() {
 
@@ -81,8 +80,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
 }
 
-
-
+    //Removes the respective Formula1Driver object from the driverList array list based on users choice
     @Override
     public void deleteDriver() {
         if(driverList.isEmpty()){
@@ -102,12 +100,12 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             }
             else{
                 System.out.println("No driver with that name");
-
             }
-
         }
     }
 
+
+    //Sets the new driver name for the respective Driver object based on the user selected team
     @Override
     public void changeDriver() {
         if(driverList.isEmpty()){
@@ -133,6 +131,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //sets the Formula1Driver objects in descending order according to points earned by each driver
     static class driverSortDescending implements Comparator<Formula1Driver>{
         public int compare(Formula1Driver driver1, Formula1Driver driver2){
             if(driver1.getPoints()==driver2.getPoints()){
@@ -152,6 +151,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+
+    //sets the Formula1Driver object in ascending order according to points earned by each driver
     static class driverSortAscending implements Comparator<Formula1Driver>{
         public int compare(Formula1Driver driver1, Formula1Driver driver2){
             if(driver1.getPoints()==driver2.getPoints()){
@@ -171,6 +172,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //sets the Formula1Driver objects in descending order according to first positions earned
     static class driverSortFirstPositions implements Comparator<Formula1Driver>{
         public int compare(Formula1Driver driver1, Formula1Driver driver2){
             if(driver1.getPositionsCount()[0]==driver2.getPositionsCount()[0]){
@@ -184,6 +186,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //sets the Race objects in ascending order according to the date
     static class raceSort implements Comparator<Race>{
         public int compare(Race race1, Race race2){
             if(race1.getYear()==race2.getYear()){
@@ -214,6 +217,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //displays the statistics of the specified driver
     @Override
     public void displayStats() {
         if(driverList.isEmpty()){
@@ -243,6 +247,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
     }
 
+    //displays the drivers and their respective details in a tabular format
     @Override
     public void displayTable() {
         driverList.sort(new driverSortDescending());
@@ -257,6 +262,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //Adds a new race according to user entered information
     @Override
     public void addRace() {
         int day = 0;
@@ -346,6 +352,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //saves the information of the drivers into a text file
     @Override
     public void saveDriverInfo() {
         try{
@@ -380,6 +387,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
     }
 
+    //saves the information of the races in a text file
     @Override
     public void saveRaceInfo(){
         try{
@@ -413,6 +421,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //reads the information from the Drivers text file and resumes the program from the previous state
     @Override
     public void readDriverInfo() {
 
@@ -443,6 +452,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
     }
 
+    //reads the information from the Races text file and resumes the program from the previous state
     @Override
     public void readRaceInfo() {
         try{
@@ -471,6 +481,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         }
     }
 
+    //common method which can be called to build a table for driver sorting GUIs
     public void buildTableGui(String tableTitle){
         String[][] data = new String[driverList.size()][8];
         int index=0;
@@ -496,6 +507,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         frame.setVisible(true);
     }
 
+    //creates the main menu, where the user can select different options
     @Override
     public void openGui(){
         JFrame f=new JFrame("Main menu");
@@ -508,21 +520,21 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         });
 
         JButton sortAscending=new JButton("Sort : Ascending");
-        sortAscending.setBounds(250,50,180,30);
+        sortAscending.setBounds(300,50,180,30);
         sortAscending.addActionListener(e -> {
             driverList.sort(new driverSortAscending());
             buildTableGui("Driver Table Ascending");
         });
 
         JButton sortFirstPosition=new JButton("Sort : 1st Positions won");
-        sortFirstPosition.setBounds(450,50,180,30);
+        sortFirstPosition.setBounds(50,100,180,30);
         sortFirstPosition.addActionListener(e -> {
             driverList.sort(new driverSortFirstPositions());
             buildTableGui("Driver Table First Positions");
         });
 
         JButton generateRace=new JButton("Generate Race");
-        generateRace.setBounds(50,100,180,30);
+        generateRace.setBounds(50,150,180,30);
         generateRace.addActionListener(e -> {
             Collections.shuffle(driverList);
             ArrayList<String> shuffledDrivers = new ArrayList<>();
@@ -543,13 +555,13 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             randomRace.setMonth(randomMonth);
             randomRace.setYear(randomYear);
             int positionIndex = 3;
-            int position = 0;
+            index = 0;
             for(Formula1Driver driver:driverList){
                 data[0][positionIndex] = driver.getDriverName();
                 driver.addRaces();
-                driver.addPosition(position);
+                driver.addPosition(index);
                 positionIndex++;
-                position++;
+                index++;
             }
             randomRace.setDriverPosition(shuffledDrivers);
             raceList.add(randomRace);
@@ -566,11 +578,11 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
         });
 
-        JButton generateRaceMod=new JButton("Generate Race II");
-        generateRaceMod.setBounds(250,100,180,30);
+        JButton generateRaceMod=new JButton("Generate Race : Type II");
+        generateRaceMod.setBounds(300,150,180,30);
 
         JButton sortRace=new JButton("Sort : Races");
-        sortRace.setBounds(450,100,180,30);
+        sortRace.setBounds(300,100,180,30);
         sortRace.addActionListener(e -> {
             raceList.sort(new raceSort());
             String[][] data = new String[raceList.size()][13];
@@ -599,9 +611,9 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         });
 
         JButton searchRace=new JButton("Search race");
-        searchRace.setBounds(50,150,180,30);
+        searchRace.setBounds(180,200,180,30);
         JTextField userInputField = new JTextField();
-        userInputField.setBounds(50,200,180,30);
+        userInputField.setBounds(180,250,180,30);
         userInputField.addActionListener(e -> {
 
         });
@@ -614,7 +626,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         f.add(sortRace);
         f.add(searchRace);
         f.add(userInputField);
-        f.setSize(800,600);
+        f.setSize(550,350);
         f.setLayout(null);
         f.setVisible(true);
 

@@ -46,7 +46,7 @@ public class Formula1Driver extends Driver {
 
     //iterates the total number of races participated in by 1
     public void addRaces() {
-        this.totalRaces = totalRaces + 1;
+        totalRaces++;
     }
 
     //sets the total number of races participated in by 1
