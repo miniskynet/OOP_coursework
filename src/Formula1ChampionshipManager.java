@@ -510,7 +510,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
     //creates the main menu, where the user can select different options
     @Override
     public void openGui(){
-        JFrame f=new JFrame("Main menu");
+        JFrame menu=new JFrame("Main menu");
 
         JButton sortDescending = new JButton("Sort : Descending");
         sortDescending.setBounds(50,50,180,30);
@@ -557,9 +557,11 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             int positionIndex = 3;
             index = 0;
             for(Formula1Driver driver:driverList){
-                data[0][positionIndex] = driver.getDriverName();
                 driver.addRaces();
-                driver.addPosition(index);
+                if(index<11&&positionIndex<13){
+                    data[0][positionIndex] = driver.getDriverName();
+                    driver.addPosition(index);
+                }
                 positionIndex++;
                 index++;
             }
@@ -593,7 +595,9 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 data[index][2] = String.valueOf(race1.getYear());
                 int positionCount = 0;
                 for(int i=3;i<(race1.getDriverPosition().size()+3);i++){
-                    data[index][i] = race1.getDriverPosition().get(positionCount);
+                    if(i<13){
+                        data[index][i] = race1.getDriverPosition().get(positionCount);
+                    }
                     positionCount++;
                 }
                 index++;
@@ -614,21 +618,51 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         searchRace.setBounds(180,200,180,30);
         JTextField userInputField = new JTextField();
         userInputField.setBounds(180,250,180,30);
-        userInputField.addActionListener(e -> {
+        searchRace.addActionListener(e -> {
+            String driverSearch = userInputField.getText();
+            if(!checkName(driverSearch)){
+                JOptionPane.showMessageDialog(menu,"Driver with that name does not exist","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                String[][] data = new String[raceList.size()][4];
+                int index=0;
+                for(Race race1:raceList){
+                    for(String name:race1.getDriverPosition()){
+
+                        if(name.equalsIgnoreCase(driverSearch)){
+                            data[index][0] = String.valueOf(race1.getDay());
+                            data[index][1] = String.valueOf(race1.getMonth());
+                            data[index][2] = String.valueOf(race1.getYear());
+                            data[index][3] = String.valueOf(race1.getDriverPosition().indexOf(name)+1);
+                            index++;
+                        }
+
+
+                    }
+                }
+                String[] columnName = {"Day","Month","Year","Position"};
+
+                JTable table = new JTable(data,columnName);
+                JFrame frame = new JFrame("Driver Participated Races");
+                frame.add(new JScrollPane(table));
+                frame.setSize(640,480);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setVisible(true);
+            }
 
         });
 
-        f.add(sortDescending);
-        f.add(sortAscending);
-        f.add(sortFirstPosition);
-        f.add(generateRace);
-        f.add(generateRaceMod);
-        f.add(sortRace);
-        f.add(searchRace);
-        f.add(userInputField);
-        f.setSize(550,350);
-        f.setLayout(null);
-        f.setVisible(true);
+        menu.add(sortDescending);
+        menu.add(sortAscending);
+        menu.add(sortFirstPosition);
+        menu.add(generateRace);
+        menu.add(generateRaceMod);
+        menu.add(sortRace);
+        menu.add(searchRace);
+        menu.add(userInputField);
+        menu.setSize(550,350);
+        menu.setLayout(null);
+        menu.setVisible(true);
 
     }
 
