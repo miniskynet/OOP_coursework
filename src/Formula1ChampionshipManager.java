@@ -1,9 +1,5 @@
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Formula1ChampionshipManager implements ChampionshipManager {
@@ -223,7 +219,6 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             else{
                 System.out.println("No team with that name");
             }
-
         }
     }
 
@@ -355,7 +350,6 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                                 " for a position");
                     }
                 }
-
             }
             raceList.add(race);
             race.setDriverPosition(temporaryDriverList);
@@ -453,7 +447,6 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 newDriver.setTotalRaces(Integer.parseInt(dataArray[13]));
                 driverList.add(newDriver);
             }
-
         }
         catch(FileNotFoundException e) {
             System.out.println("Error");
@@ -671,6 +664,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         menu.setSize(550,350);
         menu.setLayout(null);
         menu.setVisible(true);
+        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
 }
