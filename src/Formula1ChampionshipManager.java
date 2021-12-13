@@ -617,32 +617,43 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             populateDrivers(randomDrivers,shuffledDrivers,94,96,6);
             populateDrivers(randomDrivers,shuffledDrivers,96,98,7);
             populateDrivers(randomDrivers,shuffledDrivers,98,100,8);
-            for(String item:randomDrivers){
-                System.out.println(item);
+            Collections.shuffle(Arrays.asList(randomDrivers));
+            Random rand = new Random();
+            String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
+            int positionIndex = 3;
+            index = 0;
+            ArrayList<String> newGeneratedDrivers = new ArrayList<>();
+            for(Formula1Driver driver:driverList){
+                driver.addRaces();
+                if(index==0){
+                    for(Formula1Driver driverSeek:driverList){
+                        if(driverSeek.getDriverName().equalsIgnoreCase(firstPlace)){
+                            data[0][positionIndex] = driver.getDriverName();
+                            driver.addPosition(index);
+                            newGeneratedDrivers.add(index,driver.getDriverName());
+                        }
+                    }
+                }
+                else if(index<11&&positionIndex<13){
+                    data[0][positionIndex] = driver.getDriverName();
+                    driver.addPosition(index);
+                    newGeneratedDrivers.add(index,driver.getDriverName());
+                }
+                positionIndex++;
+                index++;
             }
-//            int positionIndex = 3;
-//            index = 0;
-//            for(Formula1Driver driver:driverList){
-//                driver.addRaces();
-//                if(index<11&&positionIndex<13){
-//                    data[0][positionIndex] = driver.getDriverName();
-//                    driver.addPosition(index);
-//                }
-//                positionIndex++;
-//                index++;
-//            }
-//            randomRace.setDriverPosition(shuffledDrivers);
-//            raceList.add(randomRace);
-//
-//            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
-//                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
-//
-//            JTable table = new JTable(data,columnName);
-//            JFrame frame = new JFrame("Sorted Races");
-//            frame.add(new JScrollPane(table));
-//            frame.setSize(640,480);
-//            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            frame.setVisible(true);
+            randomRace.setDriverPosition(newGeneratedDrivers);
+            raceList.add(randomRace);
+
+            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+            JTable table = new JTable(data,columnName);
+            JFrame frame = new JFrame("Sorted Races");
+            frame.add(new JScrollPane(table));
+            frame.setSize(640,480);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
 
         });
 
