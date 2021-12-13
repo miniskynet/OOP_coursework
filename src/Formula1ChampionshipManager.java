@@ -507,6 +507,11 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
+    public void populateDrivers(String[] randomDrivers,ArrayList<String> shuffledDrivers, int startIndex, int range,int indexForGet){
+        for(int i=startIndex;i<range;i++){
+            randomDrivers[i] = shuffledDrivers.get(indexForGet);
+        }
+    }
 
     //creates the main menu, where the user can select different options
     @Override
@@ -583,6 +588,63 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
         JButton generateRaceMod=new JButton("Generate Race : Type II");
         generateRaceMod.setBounds(300,150,180,30);
+        generateRaceMod.addActionListener(e -> {
+            Collections.shuffle(driverList);
+            ArrayList<String> shuffledDrivers = new ArrayList<>();
+            int index = 0;
+            for(Formula1Driver driver:driverList){
+                shuffledDrivers.add(index,driver.getDriverName());
+                index++;
+            }
+            int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
+            int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
+            int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
+            String[][] data = new String[1][13];
+            data[0][0] = String.valueOf(randomDay);
+            data[0][1] = String.valueOf(randomMonth);
+            data[0][2] = String.valueOf(randomYear);
+            Race randomRace = new Race();
+            randomRace.setDay(randomDay);
+            randomRace.setMonth(randomMonth);
+            randomRace.setYear(randomYear);
+            String[] randomDrivers = new String[100];
+            populateDrivers(randomDrivers,shuffledDrivers,0,40,0);
+            populateDrivers(randomDrivers,shuffledDrivers,40,70,1);
+            populateDrivers(randomDrivers,shuffledDrivers,70,80,2);
+            populateDrivers(randomDrivers,shuffledDrivers,80,90,3);
+            populateDrivers(randomDrivers,shuffledDrivers,90,92,4);
+            populateDrivers(randomDrivers,shuffledDrivers,92,94,5);
+            populateDrivers(randomDrivers,shuffledDrivers,94,96,6);
+            populateDrivers(randomDrivers,shuffledDrivers,96,98,7);
+            populateDrivers(randomDrivers,shuffledDrivers,98,100,8);
+            for(String item:randomDrivers){
+                System.out.println(item);
+            }
+//            int positionIndex = 3;
+//            index = 0;
+//            for(Formula1Driver driver:driverList){
+//                driver.addRaces();
+//                if(index<11&&positionIndex<13){
+//                    data[0][positionIndex] = driver.getDriverName();
+//                    driver.addPosition(index);
+//                }
+//                positionIndex++;
+//                index++;
+//            }
+//            randomRace.setDriverPosition(shuffledDrivers);
+//            raceList.add(randomRace);
+//
+//            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+//                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
+//
+//            JTable table = new JTable(data,columnName);
+//            JFrame frame = new JFrame("Sorted Races");
+//            frame.add(new JScrollPane(table));
+//            frame.setSize(640,480);
+//            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//            frame.setVisible(true);
+
+        });
 
         JButton sortRace=new JButton("Sort : Races");
         sortRace.setBounds(300,100,180,30);
