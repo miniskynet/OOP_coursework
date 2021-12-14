@@ -578,7 +578,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                     "6th Position","7th Position","8th Position","9th Position","10th Position"};
 
             JTable table = new JTable(data,columnName);
-            JFrame frame = new JFrame("Sorted Races");
+            JFrame frame = new JFrame("Generated Race");
             frame.add(new JScrollPane(table));
             frame.setSize(640,480);
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -649,7 +649,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                     "6th Position","7th Position","8th Position","9th Position","10th Position"};
 
             JTable table = new JTable(data,columnName);
-            JFrame frame = new JFrame("Sorted Races");
+            JFrame frame = new JFrame("Generated Race type II");
             frame.add(new JScrollPane(table));
             frame.setSize(640,480);
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -705,7 +705,6 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 int index=0;
                 for(Race race1:raceList){
                     for(String name:race1.getDriverPosition()){
-
                         if(name.equalsIgnoreCase(driverSearch)){
                             data[index][0] = String.valueOf(race1.getDay());
                             data[index][1] = String.valueOf(race1.getMonth());
