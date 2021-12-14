@@ -620,7 +620,6 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             Collections.shuffle(Arrays.asList(randomDrivers));
             Random rand = new Random();
             String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
-            System.out.println("\nFirst Position : " + firstPlace);
             int columnPosition = 3;
             index = 0;
             ArrayList<String> newGeneratedDrivers = new ArrayList<>();
