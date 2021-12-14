@@ -560,15 +560,15 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             randomRace.setDay(randomDay);
             randomRace.setMonth(randomMonth);
             randomRace.setYear(randomYear);
-            int positionIndex = 3;
+            int columnPosition = 3;
             index = 0;
             for(Formula1Driver driver:driverList){
                 driver.addRaces();
-                if(index<11&&positionIndex<13){
-                    data[0][positionIndex] = driver.getDriverName();
+                if(index<11&&columnPosition<13){
+                    data[0][columnPosition] = driver.getDriverName();
                     driver.addPosition(index);
                 }
-                positionIndex++;
+                columnPosition++;
                 index++;
             }
             randomRace.setDriverPosition(shuffledDrivers);
@@ -620,7 +620,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             Collections.shuffle(Arrays.asList(randomDrivers));
             Random rand = new Random();
             String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
-            int positionIndex = 3;
+            System.out.println("\nFirst Position : " + firstPlace);
+            int columnPosition = 3;
             index = 0;
             ArrayList<String> newGeneratedDrivers = new ArrayList<>();
             for(Formula1Driver driver:driverList){
@@ -628,18 +629,18 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 if(index==0){
                     for(Formula1Driver driverSeek:driverList){
                         if(driverSeek.getDriverName().equalsIgnoreCase(firstPlace)){
-                            data[0][positionIndex] = driver.getDriverName();
-                            driver.addPosition(index);
-                            newGeneratedDrivers.add(index,driver.getDriverName());
+                            data[0][columnPosition] = driverSeek.getDriverName();
+                            driverSeek.addPosition(index);
+                            newGeneratedDrivers.add(index,driverSeek.getDriverName());
                         }
                     }
                 }
-                else if(index<11&&positionIndex<13){
-                    data[0][positionIndex] = driver.getDriverName();
+                else if(index<11&&columnPosition<13){
+                    data[0][columnPosition] = driver.getDriverName();
                     driver.addPosition(index);
                     newGeneratedDrivers.add(index,driver.getDriverName());
                 }
-                positionIndex++;
+                columnPosition++;
                 index++;
             }
             randomRace.setDriverPosition(newGeneratedDrivers);
