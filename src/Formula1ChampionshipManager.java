@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 
@@ -517,10 +519,12 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
     @Override
     public void openGui(){
         JFrame menu=new JFrame("Main menu");
-
+        //all the buttons will be created as follows,
+        // with respective functionalities to occur with button click event
         JButton sortDescending = new JButton("Sort : Descending");
         sortDescending.setBounds(50,50,180,30);
         sortDescending.addActionListener(e -> {
+            //before the table building method is called the respective sort comparator is called
             driverList.sort(new driverSortDescending());
             buildTableGui("Driver Table Descending");
         });
@@ -542,6 +546,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         JButton generateRace=new JButton("Generate Race");
         generateRace.setBounds(50,150,180,30);
         generateRace.addActionListener(e -> {
+            //shuffles the driver objects and
+            // copies the names onto a new string arraylist in order
             Collections.shuffle(driverList);
             ArrayList<String> shuffledDrivers = new ArrayList<>();
             int index = 0;
@@ -549,31 +555,50 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 shuffledDrivers.add(index,driver.getDriverName());
                 index++;
             }
+            //random date information is created as follows
             int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
             int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
             int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
+            //the data 2d array stores the information of the generated race
             String[][] data = new String[1][13];
             data[0][0] = String.valueOf(randomDay);
             data[0][1] = String.valueOf(randomMonth);
             data[0][2] = String.valueOf(randomYear);
+            //a new race object will be created to store the date information
             Race randomRace = new Race();
             randomRace.setDay(randomDay);
             randomRace.setMonth(randomMonth);
             randomRace.setYear(randomYear);
+            //the position of the column should start at index 3
+            // since the first three indexes are occupied by data columns
+            // hence the variable:columnPosition is assigned as follows
             int columnPosition = 3;
             index = 0;
+            //iterates through each driver objects,
+            //and increments the race count by 1
             for(Formula1Driver driver:driverList){
                 driver.addRaces();
+                //the if statement is used to avoid an index out of bounds error,
+                //since the data array and the driver position array
+                // can only store the first 10 positions of the drivers
                 if(index<11&&columnPosition<13){
+                    //the respective data array position is assigned the drivers name,
+                    //and the respective drivers position element in the array
+                    // is incremented by 1 depending on the index
                     data[0][columnPosition] = driver.getDriverName();
                     driver.addPosition(index);
                 }
+                //the two varaibles are incremented through each iteration,
+                //to keep track of the indexing
                 columnPosition++;
                 index++;
             }
+            //the names of the drivers are passed onto the respective
+            //race object and the object is then stores in the raceList array list
             randomRace.setDriverPosition(shuffledDrivers);
             raceList.add(randomRace);
 
+            //the required column headers are assigned to the columName array
             String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
                     "6th Position","7th Position","8th Position","9th Position","10th Position"};
 
@@ -733,6 +758,7 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         menu.add(sortRace);
         menu.add(searchRace);
         menu.add(userInputField);
+        menu.getContentPane().setBackground(Color.lightGray);
         menu.setSize(550,350);
         menu.setLayout(null);
         menu.setVisible(true);
