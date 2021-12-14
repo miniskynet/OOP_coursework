@@ -1,9 +1,10 @@
 public class Formula1Driver extends Driver {
 
-    //stores the number of positions earned by each respective driver
-    // (includes up until the top 10 positions)
+    //stores the number of positions earned by each respective driver,
+    //points which will be granted in order of positions earned,
+    //the total points earned by the driver and the total races he/she
+    //has participated in the respective variable order
     private final int[] positionsCount = new int[10];
-    //stores the points which will be granted in order of positions earned
     private final int[] pointSheet = {25, 18, 15, 12, 10, 8, 6, 4, 2, 1};
     private int points;
     private int totalRaces =0;
@@ -38,8 +39,6 @@ public class Formula1Driver extends Driver {
         return this.points;
     }
 
-    //returns the total number of races,
-    //which a particular driver has participated in
     public int getTotalRaces() {
         return this.totalRaces;
     }
@@ -49,10 +48,8 @@ public class Formula1Driver extends Driver {
         totalRaces++;
     }
 
-    //sets the total number of races participated in by 1
+    //sets the total number of races participated
     public void setTotalRaces(int totalRaces){
         this.totalRaces = totalRaces;
     }
-
-
 }

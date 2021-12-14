@@ -1,40 +1,32 @@
 public abstract class Driver {
 
+    //stores the names of the driver, the location he is hailing from as well
+    //the name of the team he is representing in the respective variable order
     private String driverName;
     private String location;
     private String teamName;
 
-    //returns the drivers name
     public String getDriverName() {
         return this.driverName;
     }
 
-    //sets the name of the driver
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
 
-    //gets the location on where the driver is based
     public String getLocation() {
         return this.location;
     }
 
-    //sets the location of the driver
     public void setLocation(String location) {
         this.location = location;
     }
 
-    //gets the team name of the particular driver
     public String getTeamName() {
         return this.teamName;
     }
 
-    //sets the team name of the driver
     public void setTeamName(String TeamName) {
         this.teamName = TeamName;
     }
-
-
-
-
 }

@@ -27,7 +27,6 @@ public class FormulaTester {
                 System.out.println("Please enter a value between 1-9");
                 sc.nextLine();
             }
-
             //switch cases to call the functionalities of the
             // appropriate class based on the users preference
             switch (userInput) {
@@ -43,7 +42,6 @@ public class FormulaTester {
                 }
                 case(8) -> manager.openGui();
             }
-
         }
     }
 }
