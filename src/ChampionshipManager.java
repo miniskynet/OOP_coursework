@@ -1,5 +1,4 @@
 interface ChampionshipManager {
-
     //following is all the methods which should be implemented in the Formula1ChampionshipManager class
     void createNewDriver();
     void deleteDriver();
@@ -12,5 +11,4 @@ interface ChampionshipManager {
     void readDriverInfo();
     void readRaceInfo();
     void openGui();
-
 }

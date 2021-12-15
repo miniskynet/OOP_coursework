@@ -558,152 +558,161 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         JButton generateRace=new JButton("Generate Race");
         generateRace.setBounds(50,150,180,30);
         generateRace.addActionListener(e -> {
-            //shuffles the driver objects and
-            // copies the names onto a new string arraylist in order
-            Collections.shuffle(driverList);
-            ArrayList<String> shuffledDrivers = new ArrayList<>();
-            int index = 0;
-            for(Formula1Driver driver:driverList){
-                shuffledDrivers.add(index,driver.getDriverName());
-                index++;
+            if(driverList.isEmpty()){
+                JOptionPane.showMessageDialog(menu,"There are no drivers to generate a race","Error",JOptionPane.ERROR_MESSAGE);
             }
-            //random date information is created as follows
-            int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
-            int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
-            int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
-            //the data 2d array stores the information of the generated race
-            String[][] data = new String[1][13];
-            data[0][0] = String.valueOf(randomDay);
-            data[0][1] = String.valueOf(randomMonth);
-            data[0][2] = String.valueOf(randomYear);
-            //a new race object will be created to store the date information
-            Race randomRace = new Race();
-            randomRace.setDay(randomDay);
-            randomRace.setMonth(randomMonth);
-            randomRace.setYear(randomYear);
-            //the position of the column should start at index 3
-            // since the first three indexes are occupied by data columns
-            // hence the variable:columnPosition is assigned as follows
-            int columnPosition = 3;
-            index = 0;
-            //iterates through each driver objects,
-            //and increments the race count by 1
-            for(Formula1Driver driver:driverList){
-                driver.addRaces();
-                //the if statement is used to avoid an index out of bounds error,
-                //since the data array and the driver position array
-                // can only store the first 10 positions of the drivers
-                if(index<11&&columnPosition<13){
-                    //the respective data array position is assigned the drivers name,
-                    //and the respective drivers position element in the array
-                    // is incremented by 1 depending on the index
-                    data[0][columnPosition] = driver.getDriverName();
-                    driver.addPosition(index);
+            else{
+                //shuffles the driver objects and
+                // copies the names onto a new string arraylist in order
+                Collections.shuffle(driverList);
+                ArrayList<String> shuffledDrivers = new ArrayList<>();
+                int index = 0;
+                for(Formula1Driver driver:driverList){
+                    shuffledDrivers.add(index,driver.getDriverName());
+                    index++;
                 }
-                //the two varaibles are incremented through each iteration,
-                //to keep track of the indexing
-                columnPosition++;
-                index++;
+                //random date information is created as follows
+                int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
+                int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
+                int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
+                //the data 2d array stores the information of the generated race
+                String[][] data = new String[1][13];
+                data[0][0] = String.valueOf(randomDay);
+                data[0][1] = String.valueOf(randomMonth);
+                data[0][2] = String.valueOf(randomYear);
+                //a new race object will be created to store the date information
+                Race randomRace = new Race();
+                randomRace.setDay(randomDay);
+                randomRace.setMonth(randomMonth);
+                randomRace.setYear(randomYear);
+                //the position of the column should start at index 3
+                // since the first three indexes are occupied by data columns
+                // hence the variable:columnPosition is assigned as follows
+                int columnPosition = 3;
+                index = 0;
+                //iterates through each driver objects,
+                //and increments the race count by 1
+                for(Formula1Driver driver:driverList){
+                    driver.addRaces();
+                    //the if statement is used to avoid an index out of bounds error,
+                    //since the data array and the driver position array
+                    // can only store the first 10 positions of the drivers
+                    if(index<11&&columnPosition<13){
+                        //the respective data array position is assigned the drivers name,
+                        //and the respective drivers position element in the array
+                        // is incremented by 1 depending on the index
+                        data[0][columnPosition] = driver.getDriverName();
+                        driver.addPosition(index);
+                    }
+                    //the two varaibles are incremented through each iteration,
+                    //to keep track of the indexing
+                    columnPosition++;
+                    index++;
+                }
+                //the names of the drivers are passed onto the respective
+                //race object and the object is then stores in the raceList array list
+                randomRace.setDriverPosition(shuffledDrivers);
+                raceList.add(randomRace);
+
+                //the required column headers are assigned to the columName array
+                String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+                        "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+                JTable table = new JTable(data,columnName);
+                JFrame frame = new JFrame("Generated Race");
+                frame.add(new JScrollPane(table));
+                frame.setSize(640,480);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setVisible(true);
             }
-            //the names of the drivers are passed onto the respective
-            //race object and the object is then stores in the raceList array list
-            randomRace.setDriverPosition(shuffledDrivers);
-            raceList.add(randomRace);
-
-            //the required column headers are assigned to the columName array
-            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
-                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
-
-            JTable table = new JTable(data,columnName);
-            JFrame frame = new JFrame("Generated Race");
-            frame.add(new JScrollPane(table));
-            frame.setSize(640,480);
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setVisible(true);
-
         });
 
         JButton generateRaceMod=new JButton("Generate Race : Type II");
         generateRaceMod.setBounds(300,150,180,30);
         generateRaceMod.addActionListener(e -> {
-            Collections.shuffle(driverList);
-            ArrayList<String> shuffledDrivers = new ArrayList<>();
-            int index = 0;
-            for(Formula1Driver driver:driverList){
-                shuffledDrivers.add(index,driver.getDriverName());
-                index++;
+            if(driverList.isEmpty()){
+                JOptionPane.showMessageDialog(menu,"There are no drivers to generate a race","Error",JOptionPane.ERROR_MESSAGE);
             }
-            int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
-            int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
-            int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
-            String[][] data = new String[1][13];
-            data[0][0] = String.valueOf(randomDay);
-            data[0][1] = String.valueOf(randomMonth);
-            data[0][2] = String.valueOf(randomYear);
-            Race randomRace = new Race();
-            randomRace.setDay(randomDay);
-            randomRace.setMonth(randomMonth);
-            randomRace.setYear(randomYear);
-            //a new array with a range of 100 is required to mimic the probability
-            String[] randomDrivers = new String[100];
-            //the randomDrivers will be populated with the driver names,
-            //according to their respective probability percentages
-            populateDrivers(randomDrivers,shuffledDrivers,0,40,0);
-            populateDrivers(randomDrivers,shuffledDrivers,40,70,1);
-            populateDrivers(randomDrivers,shuffledDrivers,70,80,2);
-            populateDrivers(randomDrivers,shuffledDrivers,80,90,3);
-            populateDrivers(randomDrivers,shuffledDrivers,90,92,4);
-            populateDrivers(randomDrivers,shuffledDrivers,92,94,5);
-            populateDrivers(randomDrivers,shuffledDrivers,94,96,6);
-            populateDrivers(randomDrivers,shuffledDrivers,96,98,7);
-            populateDrivers(randomDrivers,shuffledDrivers,98,100,8);
-            //the populated array will then be shuffled and the driver who won the first place
-            //is selected via a random index
-            Collections.shuffle(Arrays.asList(randomDrivers));
-            Random rand = new Random();
-            String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
-            int columnPosition = 3;
-            index = 0;
-            ArrayList<String> newGeneratedDrivers = new ArrayList<>();
-            for(Formula1Driver driver:driverList){
-                driver.addRaces();
-                //if the current occurrence of the index is 0,
-                //iterate through the driverList once more to identify the driver object
-                //with the identical name, and update the respective driver object,
-                //as well as add the name to a new arrayList to be used later to update the race object
-                if(index==0){
-                    for(Formula1Driver driverSeek:driverList){
-                        if(driverSeek.getDriverName().equalsIgnoreCase(firstPlace)){
-                            data[0][columnPosition] = driverSeek.getDriverName();
-                            driverSeek.addPosition(index);
-                            newGeneratedDrivers.add(index,driverSeek.getDriverName());
+            else{
+                Collections.shuffle(driverList);
+                ArrayList<String> shuffledDrivers = new ArrayList<>();
+                int index = 0;
+                for(Formula1Driver driver:driverList){
+                    shuffledDrivers.add(index,driver.getDriverName());
+                    index++;
+                }
+                int randomDay = (int) Math.floor(Math.random()*(31-1+1)+1);
+                int randomMonth = (int) Math.floor(Math.random()*(12-1+1)+1);
+                int randomYear = (int) Math.floor(Math.random()*(2022-1900+1)+1900);
+                String[][] data = new String[1][13];
+                data[0][0] = String.valueOf(randomDay);
+                data[0][1] = String.valueOf(randomMonth);
+                data[0][2] = String.valueOf(randomYear);
+                Race randomRace = new Race();
+                randomRace.setDay(randomDay);
+                randomRace.setMonth(randomMonth);
+                randomRace.setYear(randomYear);
+                //a new array with a range of 100 is required to mimic the probability
+                String[] randomDrivers = new String[100];
+                //the randomDrivers will be populated with the driver names,
+                //according to their respective probability percentages
+                populateDrivers(randomDrivers,shuffledDrivers,0,40,0);
+                populateDrivers(randomDrivers,shuffledDrivers,40,70,1);
+                populateDrivers(randomDrivers,shuffledDrivers,70,80,2);
+                populateDrivers(randomDrivers,shuffledDrivers,80,90,3);
+                populateDrivers(randomDrivers,shuffledDrivers,90,92,4);
+                populateDrivers(randomDrivers,shuffledDrivers,92,94,5);
+                populateDrivers(randomDrivers,shuffledDrivers,94,96,6);
+                populateDrivers(randomDrivers,shuffledDrivers,96,98,7);
+                populateDrivers(randomDrivers,shuffledDrivers,98,100,8);
+                //the populated array will then be shuffled and the driver who won the first place
+                //is selected via a random index
+                Collections.shuffle(Arrays.asList(randomDrivers));
+                Random rand = new Random();
+                String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
+                int columnPosition = 3;
+                index = 0;
+                ArrayList<String> newGeneratedDrivers = new ArrayList<>();
+                for(Formula1Driver driver:driverList){
+                    driver.addRaces();
+                    //if the current occurrence of the index is 0,
+                    //iterate through the driverList once more to identify the driver object
+                    //with the identical name, and update the respective driver object,
+                    //as well as add the name to a new arrayList to be used later to update the race object
+                    if(index==0){
+                        for(Formula1Driver driverSeek:driverList){
+                            if(driverSeek.getDriverName().equalsIgnoreCase(firstPlace)){
+                                data[0][columnPosition] = driverSeek.getDriverName();
+                                driverSeek.addPosition(index);
+                                newGeneratedDrivers.add(index,driverSeek.getDriverName());
+                            }
                         }
                     }
+                    //if the current index occurrence does not equal 0 and is within the range of 10,
+                    //the respective driver objects will be updated as well the newGeneratedDrivers arrayList
+                    else if(index<11&&columnPosition<13){
+                        data[0][columnPosition] = driver.getDriverName();
+                        driver.addPosition(index);
+                        newGeneratedDrivers.add(index,driver.getDriverName());
+                    }
+                    columnPosition++;
+                    index++;
                 }
-                //if the current index occurrence does not equal 0 and is within the range of 10,
-                //the respective driver objects will be updated as well the newGeneratedDrivers arrayList
-                else if(index<11&&columnPosition<13){
-                    data[0][columnPosition] = driver.getDriverName();
-                    driver.addPosition(index);
-                    newGeneratedDrivers.add(index,driver.getDriverName());
-                }
-                columnPosition++;
-                index++;
+                //the newly stored driver names will be passed into the race object information,
+                //and the raceList is updated
+                randomRace.setDriverPosition(newGeneratedDrivers);
+                raceList.add(randomRace);
+
+                String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+                        "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+                JTable table = new JTable(data,columnName);
+                JFrame frame = new JFrame("Generated Race type II");
+                frame.add(new JScrollPane(table));
+                frame.setSize(640,480);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setVisible(true);
             }
-            //the newly stored driver names will be passed into the race object information,
-            //and the raceList is updated
-            randomRace.setDriverPosition(newGeneratedDrivers);
-            raceList.add(randomRace);
-
-            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
-                    "6th Position","7th Position","8th Position","9th Position","10th Position"};
-
-            JTable table = new JTable(data,columnName);
-            JFrame frame = new JFrame("Generated Race type II");
-            frame.add(new JScrollPane(table));
-            frame.setSize(640,480);
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setVisible(true);
 
         });
 
