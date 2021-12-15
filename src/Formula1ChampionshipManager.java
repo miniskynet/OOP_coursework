@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -52,8 +51,9 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
     public boolean checkParticipation(String driverName){
         boolean hasParticipated = false;
         for(Formula1Driver i: driverList){
-            if(i.getDriverName().equalsIgnoreCase(driverName) && i.getTotalRaces()>0){
+            if (i.getDriverName().equalsIgnoreCase(driverName) && i.getTotalRaces() > 0) {
                 hasParticipated = true;
+                break;
             }
         }
         return  hasParticipated;
@@ -284,6 +284,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                     "Month should be a value between 1-12" +
                     " and year should be a value between 1900-2022");
             System.out.println("Day : ");
+            //while valid date information is given by the user
+            //the console will prompt the user
             while(day<1 || day>31){
                 try{
                     day = sc.nextInt();
@@ -486,8 +488,12 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
 
     //common method which can be called to build a table for driver sorting GUIs
     public void buildTableGui(String tableTitle){
+        //the 2d array 'data' stores the information of drivers statistics
         String[][] data = new String[driverList.size()][8];
         int index=0;
+        //below for each loop iterates through the driverList,
+        //retrieves the statistics for each driver object and populates the details
+        //into the data array
         for(Formula1Driver driver:driverList){
             data[index][0] = driver.getDriverName();
             data[index][1] = driver.getLocation();
@@ -499,16 +505,22 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             data[index][7] = String.valueOf(driver.getTotalRaces());
             index++;
         }
-
+        //'columnName' stores the column header information
         String[] columnName = {"Driver Name","Location","Team Name","1st Positions","2nd Positions","3rd Positions","Total Points","Total Races"};
 
+        //creates a table with the 2 arrays which stores the column header names
+        //as well as the data cell information for each row
         JTable table = new JTable(data,columnName);
         JFrame frame = new JFrame(tableTitle);
+        //the constructed table has to be put into a scroll pane,
+        // if the information exceeds the expected limit
         frame.add(new JScrollPane(table));
         frame.setSize(640,480);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
+
+    //the following method automates populating an array via information stored in an arrayList
     public void populateDrivers(String[] randomDrivers,ArrayList<String> shuffledDrivers, int startIndex, int range,int indexForGet){
         for(int i=startIndex;i<range;i++){
             randomDrivers[i] = shuffledDrivers.get(indexForGet);
@@ -632,7 +644,10 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             randomRace.setDay(randomDay);
             randomRace.setMonth(randomMonth);
             randomRace.setYear(randomYear);
+            //a new array with a range of 100 is required to mimic the probability
             String[] randomDrivers = new String[100];
+            //the randomDrivers will be populated with the driver names,
+            //according to their respective probability percentages
             populateDrivers(randomDrivers,shuffledDrivers,0,40,0);
             populateDrivers(randomDrivers,shuffledDrivers,40,70,1);
             populateDrivers(randomDrivers,shuffledDrivers,70,80,2);
@@ -642,6 +657,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             populateDrivers(randomDrivers,shuffledDrivers,94,96,6);
             populateDrivers(randomDrivers,shuffledDrivers,96,98,7);
             populateDrivers(randomDrivers,shuffledDrivers,98,100,8);
+            //the populated array will then be shuffled and the driver who won the first place
+            //is selected via a random index
             Collections.shuffle(Arrays.asList(randomDrivers));
             Random rand = new Random();
             String firstPlace = randomDrivers[rand.nextInt(randomDrivers.length)];
@@ -650,6 +667,10 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             ArrayList<String> newGeneratedDrivers = new ArrayList<>();
             for(Formula1Driver driver:driverList){
                 driver.addRaces();
+                //if the current occurrence of the index is 0,
+                //iterate through the driverList once more to identify the driver object
+                //with the identical name, and update the respective driver object,
+                //as well as add the name to a new arrayList to be used later to update the race object
                 if(index==0){
                     for(Formula1Driver driverSeek:driverList){
                         if(driverSeek.getDriverName().equalsIgnoreCase(firstPlace)){
@@ -659,6 +680,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                         }
                     }
                 }
+                //if the current index occurrence does not equal 0 and is within the range of 10,
+                //the respective driver objects will be updated as well the newGeneratedDrivers arrayList
                 else if(index<11&&columnPosition<13){
                     data[0][columnPosition] = driver.getDriverName();
                     driver.addPosition(index);
@@ -667,6 +690,8 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
                 columnPosition++;
                 index++;
             }
+            //the newly stored driver names will be passed into the race object information,
+            //and the raceList is updated
             randomRace.setDriverPosition(newGeneratedDrivers);
             raceList.add(randomRace);
 
@@ -685,48 +710,64 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
         JButton sortRace=new JButton("Sort : Races");
         sortRace.setBounds(300,100,180,30);
         sortRace.addActionListener(e -> {
-            raceList.sort(new raceSort());
             String[][] data = new String[raceList.size()][13];
-            int index=0;
-            for(Race race1:raceList){
-                data[index][0] = String.valueOf(race1.getDay());
-                data[index][1] = String.valueOf(race1.getMonth());
-                data[index][2] = String.valueOf(race1.getYear());
-                int positionCount = 0;
-                for(int i=3;i<(race1.getDriverPosition().size()+3);i++){
-                    if(i<13){
-                        data[index][i] = race1.getDriverPosition().get(positionCount);
+            if(raceList.isEmpty()){
+                JOptionPane.showMessageDialog(menu,"There are no races to show","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                //calls the comparator to sort the race according to the date
+                raceList.sort(new raceSort());
+                int index=0;
+                //populates the data array row by row with each race information
+                for(Race race1:raceList){
+                    data[index][0] = String.valueOf(race1.getDay());
+                    data[index][1] = String.valueOf(race1.getMonth());
+                    data[index][2] = String.valueOf(race1.getYear());
+                    int positionCount = 0;
+                    for(int i=3;i<(race1.getDriverPosition().size()+3);i++){
+                        if(i<13){
+                            data[index][i] = race1.getDriverPosition().get(positionCount);
+                        }
+                        positionCount++;
                     }
-                    positionCount++;
+                    index++;
                 }
-                index++;
+                String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
+                        "6th Position","7th Position","8th Position","9th Position","10th Position"};
+
+                JTable table = new JTable(data,columnName);
+                JFrame frame = new JFrame("Sorted Races");
+                frame.add(new JScrollPane(table));
+                frame.setSize(640,480);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setVisible(true);
             }
 
-            String[] columnName = {"Day","Month","Year","1st Position","2nd Position","3rd Position","4th Position","5th Position",
-            "6th Position","7th Position","8th Position","9th Position","10th Position"};
-
-            JTable table = new JTable(data,columnName);
-            JFrame frame = new JFrame("Sorted Races");
-            frame.add(new JScrollPane(table));
-            frame.setSize(640,480);
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setVisible(true);
         });
 
         JButton searchRace=new JButton("Search race");
         searchRace.setBounds(180,200,180,30);
+        searchRace.setBackground(new Color(59,89,182));
+        searchRace.setForeground(Color.WHITE);
+        searchRace.setFont(new Font("Tahoma", Font.BOLD,12));
         JTextField userInputField = new JTextField();
         userInputField.setBounds(180,250,180,30);
         searchRace.addActionListener(e -> {
+            String[][] data = new String[raceList.size()][13];
             String driverSearch = userInputField.getText();
+            //if the user entered name does not exist on the roster,
+            //prompts the user with an error message
             if(!checkName(driverSearch)){
                 JOptionPane.showMessageDialog(menu,"Driver with that name does not exist","Error",JOptionPane.ERROR_MESSAGE);
             }
+            //if the user entered name has not participated in any race,
+            //prompts the user with an error message
             else if(!checkParticipation(driverSearch)){
                 JOptionPane.showMessageDialog(menu,"Driver has not participated in any race","Error",JOptionPane.ERROR_MESSAGE);
             }
+            //the else block only executes if the user entered name
+            //has participated in at least 1 race
             else{
-                String[][] data = new String[raceList.size()][4];
                 int index=0;
                 for(Race race1:raceList){
                     for(String name:race1.getDriverPosition()){
