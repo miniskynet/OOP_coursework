@@ -633,6 +633,9 @@ public class Formula1ChampionshipManager implements ChampionshipManager {
             if(driverList.isEmpty()){
                 JOptionPane.showMessageDialog(menu,"There are no drivers to generate a race","Error",JOptionPane.ERROR_MESSAGE);
             }
+            else if(driverList.size()<10){
+                JOptionPane.showMessageDialog(menu,"There should be at least 10 drivers to generate race","Error",JOptionPane.ERROR_MESSAGE);
+            }
             else{
                 Collections.shuffle(driverList);
                 ArrayList<String> shuffledDrivers = new ArrayList<>();
